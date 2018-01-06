@@ -1,8 +1,9 @@
-package edu.cs.agh.airly_client.Parser;
+package edu.cs.agh.airly_client.Model;
 
 import edu.cs.agh.airly_client.HTTPclient.AirlyAPIClient;
 import edu.cs.agh.airly_client.JSON.SingleSensor;
 import edu.cs.agh.airly_client.Model.Model;
+import edu.cs.agh.airly_client.Parser.ProgramInput;
 
 import java.io.IOException;
 
