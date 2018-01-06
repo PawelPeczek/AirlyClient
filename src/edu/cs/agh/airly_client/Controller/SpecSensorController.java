@@ -1,16 +1,19 @@
 package edu.cs.agh.airly_client.Controller;
 
-import edu.cs.agh.airly_client.HTTPclient.AirlyAPIClient;
-import edu.cs.agh.airly_client.JSON.MapPoint;
+import edu.cs.agh.airly_client.Model.SpecSensorModel;
 import edu.cs.agh.airly_client.Parser.ProgramInput;
+import edu.cs.agh.airly_client.Views.SpecSensorView;
 
 import java.io.IOException;
 
-public class SensorDetailsController extends Controller {
-    @Override
+public class SpecSensorController extends Controller {
+    public SpecSensorController(){
+        model = new SpecSensorModel();
+        view = new SpecSensorView();
+        model.addObserver(view);
+    }
     public void mainAction(ProgramInput input) throws IOException {
-        AirlyAPIClient AirlyAPI = new AirlyAPIClient(input.getAPIKey());
-        MapPoint data = AirlyAPI.getMeasurementsFromSpecificSensor(input.getSensorId());
-        
+        model.processData(input);
+        view.renderView();
     }
 }

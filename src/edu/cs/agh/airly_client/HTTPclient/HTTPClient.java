@@ -6,39 +6,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HTTPClient {
-    private final String APIKey =  "2d35d097f0cf4839a9df2d79fcba632c";
+    private final String APIKey;
     private final String URLBase = "https://airapi.airly.eu";
 
-//    public void ExampleRequest() throws IOException, URISyntaxException {
-//        HashMap<String, String> params = new HashMap<>();
-//        params.put("latitude", "50.06");
-//        params.put("longitude", "19.93");
-//        System.out.println(BuildURL("/v1/mapPoint/measurements", params));
-//        URL url = new URL(BuildURL("/v1/mapPoint/measurements", params));
-//        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-//        conn.setRequestMethod("GET");
-//        conn.setRequestProperty("apikey", APIKey);
-//        Gson g = new Gson();
-//        MapPoint mp = g.fromJson(new InputStreamReader(conn.getInputStream()), MapPoint.class);
-//        System.out.println(mp.getCurrentMeasurements().toString());
-//        for(SensorData sd : mp.getHistory()){
-//            System.out.println(sd.toString());
-//        }
-//
-//        for(SensorData sd : mp.getForecast()){
-//            System.out.println(sd.toString());
-//        }
-////        BufferedReader in = new BufferedReader(
-////                new InputStreamReader(conn.getInputStream()));
-////        String inputLine;
-////        StringBuffer content = new StringBuffer();
-////        while ((inputLine = in.readLine()) != null) {
-////            content.append(inputLine);
-////        }
-////        System.out.println(content);
-////        in.close();
-//        conn.disconnect();
-//    }
+    public HTTPClient(String APIKey){
+        // for now only
+        System.out.println("API: " + APIKey);
+        this.APIKey =  APIKey;
+    }
 
     protected HttpURLConnection prepareConnection(APIMethods method, HashMap<String, String> params)
             throws IOException {
