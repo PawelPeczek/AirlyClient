@@ -12,5 +12,7 @@ public class NearestSensorModel extends Model{
         AirlyAPIClient AirlyAPI = new AirlyAPIClient(input.getAPIKey());
         MapPoint data = AirlyAPI.getMeasurementsForMapPoint(input.getLatitude(), input.getLongitude());
         notifyViews("SensorData", data);
+        if(input.isHistory()) notifyViews("HistoryMode", true);
+        else notifyViews("HistoryMode", false);
     }
 }

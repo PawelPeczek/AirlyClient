@@ -41,4 +41,5 @@ public class Address {
     public void setCountry(String country) {
         this.country = country;
     }
+
 }

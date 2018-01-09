@@ -6,4 +6,9 @@ public class HelpView extends View {
         if(data.containsKey("HelpContent"))
             System.out.println(data.get("HelpContent").toString());
     }
+
+    @Override
+    protected String generateHeaderMessage() {
+        return null;
+    }
 }

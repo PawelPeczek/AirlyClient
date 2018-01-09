@@ -7,4 +7,9 @@ public class NullView extends View{
         if(data.containsKey("content"))
             System.out.println(data.get("content").toString());
     }
+
+    @Override
+    protected String generateHeaderMessage() {
+        return null;
+    }
 }

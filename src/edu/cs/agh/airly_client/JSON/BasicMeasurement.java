@@ -20,11 +20,11 @@ public abstract class BasicMeasurement {
         this.airQualityIndex = airQualityIndex;
     }
 
-    public int getPollutionLevel() {
+    public Integer getPollutionLevel() {
         return pollutionLevel;
     }
 
-    public void setPollutionLevel(int pollutionLevel) {
+    public void setPollutionLevel(Integer pollutionLevel) {
         this.pollutionLevel = pollutionLevel;
     }
 

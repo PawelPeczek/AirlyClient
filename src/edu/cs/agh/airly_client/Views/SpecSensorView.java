@@ -6,4 +6,9 @@ public class SpecSensorView extends View {
         if(data.containsKey("MapPointData"))
             System.out.println(data.get("MapPointData").toString());
     }
+
+    @Override
+    protected String generateHeaderMessage() {
+        return null;
+    }
 }

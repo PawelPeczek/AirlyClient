@@ -10,6 +10,8 @@ public class Program {
             ArgumentParser parser = new ArgumentParser();
             Dispatcher dispatcher = new Dispatcher();
             dispatcher.dispatch(parser.parseArguments(args));
+        } catch(ClassCastException e){
+            System.out.println("Cast exception!");
         } catch (Exception e){
             e.printStackTrace();
             System.out.println(e.getMessage());
