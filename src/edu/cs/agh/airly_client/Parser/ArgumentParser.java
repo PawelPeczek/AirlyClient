@@ -20,7 +20,6 @@ public class ArgumentParser {
             ValidOptions[] optionAssigned = new ValidOptions[args.length];
             for(int i = 0; i < args.length; i ++){
                 optionAssigned[i] = getOptionType(args[i]);
-                System.out.println("Name test: " + optionAssigned[i].name());
                 if(!optTypesDetected.contains(optionAssigned[i].name()))
                     optTypesDetected.add(optionAssigned[i].name());
                 else throw new ArgumentsParserException("Duplicate option found: " + args[i]);
@@ -48,8 +47,11 @@ public class ArgumentParser {
         for(int i = 0; i < assignation.length; i++){
             optTypesDetected.put(assignation[i].name(), i);
         }
+        onlyOneMainOption(optTypesDetected);
         if(optTypesDetected.containsKey(ValidOptions.history.name()))
             result.setHistoryTrue();
+        if(optTypesDetected.containsKey(ValidOptions.sensorInfo.name()))
+            result.setUnsupportedSensDetails(true);
         if(optTypesDetected.containsKey(ValidOptions.help.name())){
             result.setRunningMode(RunningMode.helpMode);
         } else if(optTypesDetected.containsKey(ValidOptions.latitude.name()) &&
@@ -61,6 +63,21 @@ public class ArgumentParser {
         provideInputInfoWithAPIKey(result, optTypesDetected.containsKey(ValidOptions.APIKey.name())
                 ? args[optTypesDetected.get(ValidOptions.APIKey.name())] : null);
         return result;
+    }
+
+    private void onlyOneMainOption(HashMap<String, Integer> optTypesDetected)
+            throws ArgumentsParserException {
+        boolean error = false;
+        if(optTypesDetected.containsKey(ValidOptions.help.name()) &&
+           (optTypesDetected.containsKey(ValidOptions.sensorId.name()) ||
+            optTypesDetected.containsKey(ValidOptions.latitude.name()) ||
+            optTypesDetected.containsKey(ValidOptions.longitude.name())))
+            error = true;
+        else if((optTypesDetected.containsKey(ValidOptions.latitude.name()) ||
+                optTypesDetected.containsKey(ValidOptions.longitude.name())) &&
+                optTypesDetected.containsKey(ValidOptions.sensorId.name()))
+            error = true;
+        if(error) throw new ArgumentsParserException("Invalid arguments - check --h");
     }
 
     private String getAPIKeyFromEnv() throws ArgumentsParserException{
@@ -92,8 +109,10 @@ public class ArgumentParser {
             throws ArgumentsParserException {
         if(optTypesDetected.containsKey(ValidOptions.sensorId.name()))
             throw new ArgumentsParserException("Valid arguments are either (latitude, longitude) or sensorId.");
-        if(optTypesDetected.containsKey(ValidOptions.sensorInfo.name()))
+        if(optTypesDetected.containsKey(ValidOptions.sensorInfo.name())) {
             progInput.setRunningMode(RunningMode.sensorDetails);
+            progInput.setUnsupportedSensDetails(false);
+        }
         else progInput.setRunningMode(RunningMode.nearestMeasurements);
         Double latitude = provideCoordValue(args[optTypesDetected.get(ValidOptions.latitude.name())]);
         Double longitude = provideCoordValue(args[optTypesDetected.get(ValidOptions.longitude.name())]);
@@ -139,7 +158,6 @@ public class ArgumentParser {
         if(matcher.find()){
             result = matcher.group(2);
         } else throw new IllegalArgumentException("Serious error. Error code 12-992. Please contact author.");
-        System.out.println("API: " + result);
         return result;
     }
 

@@ -19,11 +19,11 @@ public class NearestSensorInfoView extends View{
 
     @Override
     protected String generateHeaderMessage() {
-        return "\n*******************************************\n" +
-                "*                                         *\n" +
-                "*           Nearest sensor info           *\n" +
-                "*                                         *\n" +
-                "*******************************************\n";
+        return "\n******************************************************************\n" +
+                "*                                                                *\n" +
+                "*                        Nearest sensor info                     *\n" +
+                "*                                                                *\n" +
+                "******************************************************************\n";
     }
 
     private String generateInfoAboutSensor(SingleSensor nearestSensor){

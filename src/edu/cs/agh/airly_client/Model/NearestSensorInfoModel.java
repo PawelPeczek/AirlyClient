@@ -1,19 +1,22 @@
 package edu.cs.agh.airly_client.Model;
 
 import edu.cs.agh.airly_client.HTTPclient.AirlyAPIClient;
+import edu.cs.agh.airly_client.HTTPclient.HTTPClientException;
 import edu.cs.agh.airly_client.JSON.SingleSensor;
-import edu.cs.agh.airly_client.Model.Model;
 import edu.cs.agh.airly_client.Parser.ProgramInput;
+import edu.cs.agh.airly_client.ProcessingException;
 
 import java.io.IOException;
 
 public class NearestSensorInfoModel extends Model {
     @Override
-    public void processData(ProgramInput input) throws IOException {
+    public void processData(ProgramInput input)
+            throws IOException, InterruptedException, HTTPClientException, ProcessingException {
         AirlyAPIClient AirlyAPI = new AirlyAPIClient(input.getAPIKey());
         SingleSensor data = AirlyAPI.getMeasurementForNearestSensor(input.getLatitude(), input.getLongitude());
+        if(isObjectEmpty(data)) throw new ProcessingException("Server doesn't know the answer for given query.");
         notifyViews("SensorInfo", data);
-        if(input.isHistory()) notifyViews("HistoryMode", true);
-        else notifyViews("HistoryMode", false);
+        if(input.isHistory()) notifyViews("HistoryMode", Boolean.TRUE);
+        else notifyViews("HistoryMode",  Boolean.FALSE);
     }
 }

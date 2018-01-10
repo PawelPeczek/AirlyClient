@@ -11,6 +11,7 @@ public class ProgramInput {
     private Integer sensorId;
     private String APIKey;
     private boolean history;
+    private boolean unsupportedSensDetails = false;
 
     public Double getLatitude() {
         return latitude;
@@ -68,4 +69,11 @@ public class ProgramInput {
         this.sensorId = sensorId;
     }
 
+    public boolean isUnsupportedSensDetails() {
+        return unsupportedSensDetails;
+    }
+
+    public void setUnsupportedSensDetails(boolean val) {
+        this.unsupportedSensDetails = val;
+    }
 }

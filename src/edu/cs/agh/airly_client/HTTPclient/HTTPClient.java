@@ -10,24 +10,36 @@ public class HTTPClient {
     private final String URLBase = "https://airapi.airly.eu";
 
     public HTTPClient(String APIKey){
-        // for now only
-        System.out.println("API: " + APIKey);
         this.APIKey =  APIKey;
     }
 
     protected HttpURLConnection prepareConnection(APIMethods method, HashMap<String, String> params)
-            throws IOException {
+            throws IOException, InterruptedException, HTTPClientException {
         return prepareConnection(BuildURL(method, params));
     }
 
-    protected HttpURLConnection prepareConnection(String methodAndParams) throws IOException {
+    protected HttpURLConnection prepareConnection(String methodAndParams)
+            throws IOException, InterruptedException, HTTPClientException {
         URL url = new URL(URLBase + methodAndParams);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("apikey", APIKey);
         conn.setConnectTimeout(5000);
         conn.setReadTimeout(5000);
-        conn.connect();
+        int counter = 0;
+        while(counter < 3){
+            try {
+                conn.connect();
+                counter = 3;
+            } catch (UnknownHostException ex){
+                if(counter == 2){
+                  throw new HTTPClientException("Couldn't connect to server with 3 tries...", ex);
+                }
+                counter++;
+                Thread.sleep(3000);
+            }
+        }
+
         return conn;
     }
 

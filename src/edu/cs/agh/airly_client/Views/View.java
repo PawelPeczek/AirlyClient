@@ -3,12 +3,13 @@ package edu.cs.agh.airly_client.Views;
 import edu.cs.agh.airly_client.JSON.Address;
 import edu.cs.agh.airly_client.JSON.BasicMeasurement;
 import edu.cs.agh.airly_client.JSON.Location;
-import javafx.css.Match;
+import edu.cs.agh.airly_client.JSON.SensorData;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -126,10 +127,11 @@ public abstract class View {
 
     protected String prepareAddressInfo(Address address){
         StringBuilder result = new StringBuilder();
-        result.append(address.getRoute() != null ? "route: " + address.getRoute() + " " : "");
-        result.append(address.getStreetNumber() != null  ? "str. number: " + address.getStreetNumber() + " " : "");
-        result.append(address.getLocality() != null ? "locality: " + address.getLocality() + " " : "");
-        result.append(address.getCountry() != null ? "country: " + address.getCountry() + " " : "");
+        result.append(address.getRoute() != null ? "route: " + address.getRoute() + " " : "")
+              .append(address.getStreetNumber() != null  ?
+                "str. number: " + address.getStreetNumber() + " " : "")
+              .append(address.getLocality() != null ? "locality: " + address.getLocality() + " " : "")
+              .append(address.getCountry() != null ? "country: " + address.getCountry() + " " : "");
         if(result.length() == 0) {
             result.append("N/A");
         }
@@ -137,27 +139,52 @@ public abstract class View {
     }
 
     protected String generateBasicMeasurInfo(BasicMeasurement measurement){
-       return  "Measurement time: " +
-               (measurement.getMeasurementTime() != null ?
-                       formatMeasurementTime(measurement.getMeasurementTime()) : "N/A") +
-               "\n" +
-               "AirQualityIndex: " +
-                (measurement.getAirQualityIndex() != null ?
-                        Math.round(measurement.getAirQualityIndex()) : "N/A") +
-                "\n" +
-                "Pollution level: " +
-                (measurement.getPollutionLevel() != null ?
-                        mapPolLvlToColor(measurement.getPollutionLevel()) +
-                                measurement.getPollutionLevel().toString() + ANSI_RESET : "N/A") +
-                "\n" +
-                "PM10: " +
-                (measurement.getPm10() != null ?
-                        mapPMToColor(measurement.getPm10()) +
-                                Math.round(measurement.getPm10()) + ANSI_RESET : "N/A") +
-                "\n" +
-                "PM25: " +
-                (measurement.getPm10() != null ?
-                        mapPMToColor(measurement.getPm25()) +
-                                Math.round(measurement.getPm25()) + ANSI_RESET : "N/A");
+        StringBuilder result = new StringBuilder();
+        if(measurement != null){
+            result.append("Measurement time: ")
+                  .append(measurement.getMeasurementTime() != null ?
+                    formatMeasurementTime(measurement.getMeasurementTime()) : "N/A")
+                  .append("\n")
+                  .append(generateBasicPolutionInfo(measurement));
+        }
+        return result.toString();
+    }
+
+    private String generateBasicPolutionInfo(BasicMeasurement measurement){
+        StringBuilder result = new StringBuilder();
+        if(measurement != null){
+            result.append("AirQualityIndex: ")
+                  .append(measurement.getAirQualityIndex() != null ?
+                            Math.round(measurement.getAirQualityIndex()) : "N/A")
+                  .append("\n").append("Pollution level: ")
+                  .append(measurement.getPollutionLevel() != null ?
+                            mapPolLvlToColor(measurement.getPollutionLevel()) +
+                            measurement.getPollutionLevel().toString() + ANSI_RESET : "N/A")
+                  .append("\n").append("PM10: ").append(measurement.getPm10() != null ?
+                            mapPMToColor(measurement.getPm10()) +
+                            Math.round(measurement.getPm10()) + ANSI_RESET : "N/A")
+                  .append("\n").append("PM25: ").append(measurement.getPm10() != null ?
+                            mapPMToColor(measurement.getPm25()) +
+                            Math.round(measurement.getPm25()) + ANSI_RESET : "N/A");
+        }
+        return result.toString();
+    }
+
+    protected String generateHistoricalStats(LinkedList<SensorData> history){
+        StringBuilder result = new StringBuilder();
+        if(history != null){
+            for(SensorData entry : history){
+                if(entry.getMeasurements() == null) continue;
+                result.append("From: ");
+                result.append(formatMeasurementTime(entry.getFromDateTime()));
+                result.append(" to: ");
+                result.append(formatMeasurementTime(entry.getTillDateTime()));
+                result.append("\n");
+                result.append(generateBasicPolutionInfo(entry.getMeasurements()));
+                result.append("\n\n");
+            }
+        }
+        if(result.length() == 0) result.append("No data!");
+        return result.toString();
     }
 }

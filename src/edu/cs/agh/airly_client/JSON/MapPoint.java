@@ -5,8 +5,8 @@ import java.util.LinkedList;
 
 public class MapPoint {
     private ExtendedMeasurements currentMeasurements;
-    private LinkedList<SensorData> forecast;
-    private LinkedList<SensorData> history;
+    private LinkedList<SensorData> forecast = new LinkedList<>();
+    private LinkedList<SensorData> history = new LinkedList<>();
 
     public ExtendedMeasurements getCurrentMeasurements() {
         return currentMeasurements;

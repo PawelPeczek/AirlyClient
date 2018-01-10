@@ -1,17 +1,25 @@
 package edu.cs.agh.airly_client.Controller;
 
+import edu.cs.agh.airly_client.HTTPclient.HTTPClientException;
 import edu.cs.agh.airly_client.Model.Model;
-import edu.cs.agh.airly_client.Model.NullModel;
-import edu.cs.agh.airly_client.Views.NullView;
+import edu.cs.agh.airly_client.Parser.ProgramInput;
+import edu.cs.agh.airly_client.ProcessingException;
 import edu.cs.agh.airly_client.Views.View;
+
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 
 public abstract class Controller {
     protected Model model;
-    protected View view;
-    public Controller(){
-        model = new NullModel();
-        view = new NullView();
-        model.addObserver(view);
+    protected HashSet<View> views = new LinkedHashSet<>();
+
+    public void mainAction(ProgramInput input)
+            throws InterruptedException, HTTPClientException, IOException, ProcessingException {
+        model.processData(input);
+        for (View view : views) {
+            view.renderView();
+        }
     }
 }
