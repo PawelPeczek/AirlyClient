@@ -20,15 +20,16 @@ public class HTTPClient {
 
     protected HttpURLConnection prepareConnection(String methodAndParams)
             throws IOException, InterruptedException, HTTPClientException {
+        System.out.println("[DEBUG URL] " + URLBase + methodAndParams);
+        System.out.println("[DEBUG API] " + APIKey);
         URL url = new URL(URLBase + methodAndParams);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("apikey", APIKey);
-        conn.setConnectTimeout(5000);
-        conn.setReadTimeout(5000);
         int counter = 0;
         while(counter < 3){
             try {
+                System.out.println("New try...");
                 conn.connect();
                 counter = 3;
             } catch (UnknownHostException ex){

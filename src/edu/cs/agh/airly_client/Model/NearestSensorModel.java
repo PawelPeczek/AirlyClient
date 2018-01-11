@@ -11,10 +11,11 @@ import java.io.IOException;
 public class NearestSensorModel extends Model{
     @Override
     public void processData(ProgramInput input)
-            throws IOException, InterruptedException, HTTPClientException, ProcessingException {
+            throws IOException, InterruptedException, HTTPClientException {
         AirlyAPIClient AirlyAPI = new AirlyAPIClient(input.getAPIKey());
         MapPoint data = AirlyAPI.getMeasurementsForMapPoint(input.getLatitude(), input.getLongitude());
-        if(isObjectEmpty(data)) throw new ProcessingException("Server doesn't know the answer for given query.");
+        if(isObjectEmpty(data)) notifyViews("EmptyObject", Boolean.TRUE);
+        else notifyViews("EmptyObject", Boolean.FALSE);
         notifyViews("SensorData", data);
         if(input.isHistory()) notifyViews("HistoryMode", true);
         else notifyViews("HistoryMode", false);

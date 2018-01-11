@@ -12,9 +12,13 @@ public class SensorMeasurementView extends View {
             System.out.println(generateHeaderMessage());
             if(data.containsKey("SensorData")){
                 MapPoint sensor = (MapPoint) data.get("SensorData");
-                System.out.println(generateAsciiArt(sensor.getCurrentMeasurements() != null ?
-                        sensor.getCurrentMeasurements().getPollutionLevel() : null));
-                System.out.println(generateInfoAboutSensor(sensor));
+                if(data.containsKey("EmptyObject") && data.get("EmptyObject").equals(Boolean.TRUE))
+                    System.out.println("Measurement data for sensor unavailable");
+                else {
+                    System.out.println(generateAsciiArt(sensor.getCurrentMeasurements() != null ?
+                            sensor.getCurrentMeasurements().getPollutionLevel() : null));
+                    System.out.println(generateInfoAboutSensor(sensor));
+                }
                 if(data.containsKey("HistoryMode") && data.get("HistoryMode").equals(Boolean.TRUE)){
                     System.out.println("\n\nHistorical data:");
                     System.out.println(generateHistoricalStats(sensor.getHistory()));

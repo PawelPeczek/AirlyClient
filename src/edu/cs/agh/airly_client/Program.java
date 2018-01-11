@@ -20,6 +20,7 @@ public class Program {
             System.out.println("Program was terminated while attempting one of three tries to connect to server");
         } catch (Exception e){
             System.out.println("Some serious exception.");
+            e.printStackTrace();
             System.out.println(e.getMessage());
         }
 

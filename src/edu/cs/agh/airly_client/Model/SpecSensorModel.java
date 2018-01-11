@@ -12,10 +12,11 @@ import java.io.IOException;
 public class SpecSensorModel extends Model{
     @Override
     public void processData(ProgramInput input)
-            throws InterruptedException, HTTPClientException, IOException, ProcessingException {
+            throws InterruptedException, HTTPClientException, IOException {
         AirlyAPIClient AirlyAPI = new AirlyAPIClient(input.getAPIKey());
         MapPoint data = AirlyAPI.getMeasurementsFromSpecificSensor(input.getSensorId());
-        if(isObjectEmpty(data)) throw new ProcessingException("Server doesn't know the answer for given query.");
+        if(isObjectEmpty(data)) notifyViews("EmptyObject", Boolean.TRUE);
+        else notifyViews("EmptyObject", Boolean.FALSE);
         notifyViews("SensorData", data);
         if(input.isHistory()) notifyViews("HistoryMode", Boolean.TRUE);
         else notifyViews("HistoryMode", Boolean.FALSE);

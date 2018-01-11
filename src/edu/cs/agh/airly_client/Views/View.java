@@ -163,7 +163,7 @@ public abstract class View {
                   .append("\n").append("PM10: ").append(measurement.getPm10() != null ?
                             mapPMToColor(measurement.getPm10()) +
                             Math.round(measurement.getPm10()) + ANSI_RESET : "N/A")
-                  .append("\n").append("PM25: ").append(measurement.getPm10() != null ?
+                  .append("\n").append("PM25: ").append(measurement.getPm25() != null ?
                             mapPMToColor(measurement.getPm25()) +
                             Math.round(measurement.getPm25()) + ANSI_RESET : "N/A");
         }

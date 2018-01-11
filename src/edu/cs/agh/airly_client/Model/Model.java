@@ -20,7 +20,7 @@ public abstract class Model {
         observers.addAll(views);
     }
 
-    public abstract void processData(ProgramInput input) throws IOException, InterruptedException, HTTPClientException, ProcessingException;
+    public abstract void processData(ProgramInput input) throws IOException, InterruptedException, HTTPClientException;
 
     protected void notifyViews(String name, Object data){
         for (View v: observers) {
