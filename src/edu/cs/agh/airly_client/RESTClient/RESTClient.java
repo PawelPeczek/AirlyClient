@@ -57,8 +57,8 @@ public class RESTClient {
      */
     protected HttpURLConnection prepareConnection(String methodAndParams)
             throws IOException, InterruptedException, RESTClientException {
-        System.out.println("[DEBUG URL] " + URLBase + methodAndParams);
-        System.out.println("[DEBUG API] " + APIKey);
+        //System.out.println("[DEBUG URL] " + URLBase + methodAndParams);
+        //System.out.println("[DEBUG API] " + APIKey);
         URL url = new URL(URLBase + methodAndParams);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestProperty("Content-Type", "application/json");
@@ -71,13 +71,14 @@ public class RESTClient {
         int counter = 0;
         while(counter < 3){
             try {
-                System.out.println("New try...");
+                System.out.println("Application is trying to connect...");
                 conn.connect();
                 counter = 3;
             } catch (UnknownHostException ex){
                 if(counter == 2){
                   throw new RESTClientException("Couldn't connect to server with 3 tries...", ex);
                 }
+                System.out.println("Connection failed. Another attempt will be made.");
                 counter++;
                 Thread.sleep(3000);
             }

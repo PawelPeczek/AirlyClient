@@ -20,8 +20,6 @@ public class SensorMeasurementView extends View {
             System.out.println(generateHeaderMessage());
             if(data.containsKey("SensorData")){
                 MapPoint sensor = (MapPoint) data.get("SensorData");
-                System.out.println("Working Directory = " +
-                        System.getProperty("user.dir"));
                 if(data.containsKey("EmptyObject") && data.get("EmptyObject").equals(Boolean.TRUE))
                     System.out.println("Measurement data for sensor unavailable");
                 else {

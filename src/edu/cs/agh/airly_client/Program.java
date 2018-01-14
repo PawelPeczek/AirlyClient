@@ -21,6 +21,7 @@ public class Program {
         } catch (Exception e){
             System.out.println("Some serious exception. Please contact the creator. Error message:");
             System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
     }

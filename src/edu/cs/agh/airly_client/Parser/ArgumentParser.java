@@ -104,8 +104,10 @@ public class ArgumentParser {
             provideSingleSensorInputInfo(result, args, optTypesDetected);
         } else throw new ArgumentsParserException("Invalid arguments - check --h");
         // inserting APIKey data to output
-        provideInputInfoWithAPIKey(result, optTypesDetected.containsKey(ValidOptions.APIKey.name())
-                ? args[optTypesDetected.get(ValidOptions.APIKey.name())] : null);
+        if(!optTypesDetected.containsKey(ValidOptions.help.name())){
+            provideInputInfoWithAPIKey(result, optTypesDetected.containsKey(ValidOptions.APIKey.name())
+                    ? args[optTypesDetected.get(ValidOptions.APIKey.name())] : null);
+        }
         return result;
     }
 
@@ -149,7 +151,7 @@ public class ArgumentParser {
                 ValidOptions.APIKey.pattern.matcher("--api-key=" + env.get("AIRLY_API_KEY")).matches()){
             result = env.get("AIRLY_API_KEY");
         } else throw new ArgumentsParserException("Neither via command line args, nor in environment " +
-                "valid APIKey is given. In environment - set AirlyAPIKey variable. Valid value: " +
+                "valid APIKey is given. In environment - set AIRLY_API_KEY variable. Valid value: " +
                 "32 digits in hex.");
         return result;
     }
