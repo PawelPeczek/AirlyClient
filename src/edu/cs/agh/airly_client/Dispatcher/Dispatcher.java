@@ -6,7 +6,6 @@ import edu.cs.agh.airly_client.Controller.NearestSensorInfoController;
 import edu.cs.agh.airly_client.Controller.SpecSensorController;
 import edu.cs.agh.airly_client.HTTPclient.HTTPClientException;
 import edu.cs.agh.airly_client.Parser.ProgramInput;
-import edu.cs.agh.airly_client.ProcessingException;
 
 import java.io.IOException;
 

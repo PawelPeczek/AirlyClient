@@ -24,6 +24,11 @@ public class HTTPClient {
         System.out.println("[DEBUG API] " + APIKey);
         URL url = new URL(URLBase + methodAndParams);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setConnectTimeout(5000);
+        conn.setReadTimeout(5000);
+        conn.setRequestProperty("Accept-Charset", "UTF-8");
+        conn.setUseCaches(false);
         conn.setRequestMethod("GET");
         conn.setRequestProperty("apikey", APIKey);
         int counter = 0;

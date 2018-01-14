@@ -5,13 +5,23 @@ import edu.cs.agh.airly_client.JSON.MapPoint;
 import edu.cs.agh.airly_client.JSON.SingleSensor;
 import javafx.css.Match;
 
+/**
+ * View associated with modes -sensor-id and --latitude/--longitude (without --sensor-info)
+ */
 public class SensorMeasurementView extends View {
+    /**
+     * Implementation of abstract method from base class.
+     * Method checks if appropriate view element is present in data HashMap
+     * and if so - it's printed. Otherwise appropriate action takes place.
+     */
     @Override
     public void renderView() {
         if(data.containsKey("SensorData"))
             System.out.println(generateHeaderMessage());
             if(data.containsKey("SensorData")){
                 MapPoint sensor = (MapPoint) data.get("SensorData");
+                System.out.println("Working Directory = " +
+                        System.getProperty("user.dir"));
                 if(data.containsKey("EmptyObject") && data.get("EmptyObject").equals(Boolean.TRUE))
                     System.out.println("Measurement data for sensor unavailable");
                 else {
@@ -26,6 +36,10 @@ public class SensorMeasurementView extends View {
             } else System.out.println(generateNotFoundElementMessage("nearest sensor detailed measurements"));
     }
 
+    /**
+     * Implementation of abstract method from base class.
+     * @return SensorMeasurementView header.
+     */
     @Override
     protected String generateHeaderMessage() {
         return "\n******************************************************************\n" +
@@ -35,6 +49,13 @@ public class SensorMeasurementView extends View {
                 "******************************************************************\n";
     }
 
+    /**
+     * Method responsible for formatting data about sensor which was
+     * received from server. It converts value to appropriate form.
+     *
+     * @param nearestSensor Data about nearest sensor from server.
+     * @return Formatted output.
+     */
     private String generateInfoAboutSensor(MapPoint nearestSensor){
         StringBuilder result = new StringBuilder();
         ExtendedMeasurements currMeasur = nearestSensor.getCurrentMeasurements();

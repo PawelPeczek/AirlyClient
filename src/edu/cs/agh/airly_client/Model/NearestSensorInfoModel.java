@@ -4,7 +4,6 @@ import edu.cs.agh.airly_client.HTTPclient.AirlyAPIClient;
 import edu.cs.agh.airly_client.HTTPclient.HTTPClientException;
 import edu.cs.agh.airly_client.JSON.SingleSensor;
 import edu.cs.agh.airly_client.Parser.ProgramInput;
-import edu.cs.agh.airly_client.ProcessingException;
 
 import java.io.IOException;
 

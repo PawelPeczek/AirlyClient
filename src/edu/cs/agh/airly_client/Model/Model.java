@@ -2,15 +2,12 @@ package edu.cs.agh.airly_client.Model;
 
 import edu.cs.agh.airly_client.HTTPclient.HTTPClientException;
 import edu.cs.agh.airly_client.JSON.MapPoint;
-import edu.cs.agh.airly_client.JSON.SensorData;
 import edu.cs.agh.airly_client.JSON.SingleSensor;
 import edu.cs.agh.airly_client.Parser.ProgramInput;
-import edu.cs.agh.airly_client.ProcessingException;
 import edu.cs.agh.airly_client.Views.View;
 
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.LinkedList;
 
 public abstract class Model {
 
@@ -31,8 +28,7 @@ public abstract class Model {
     protected boolean isObjectEmpty(SingleSensor obj){
         boolean result = false;
         if(obj == null ||
-                (obj.getId() == null && obj.getPollutionLevel() == null &&
-                obj.getPm10() == null && obj.getName() == null && obj.getPm25() == null
+                (obj.getId() == null && obj.getPm10() == null && obj.getName() == null && obj.getPm25() == null
                 && obj.getAirQualityIndex() == null && obj.getVendor() == null)) result = true;
         return result;
     }

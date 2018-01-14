@@ -19,8 +19,7 @@ public class Program {
         } catch(InterruptedException e){
             System.out.println("Program was terminated while attempting one of three tries to connect to server");
         } catch (Exception e){
-            System.out.println("Some serious exception.");
-            e.printStackTrace();
+            System.out.println("Some serious exception. Please contact the creator. Error message:");
             System.out.println(e.getMessage());
         }
 

@@ -3,7 +3,6 @@ package edu.cs.agh.airly_client.Controller;
 import edu.cs.agh.airly_client.HTTPclient.HTTPClientException;
 import edu.cs.agh.airly_client.Model.Model;
 import edu.cs.agh.airly_client.Parser.ProgramInput;
-import edu.cs.agh.airly_client.ProcessingException;
 import edu.cs.agh.airly_client.Views.View;
 
 import java.io.IOException;
@@ -16,7 +15,7 @@ public abstract class Controller {
     protected HashSet<View> views = new LinkedHashSet<>();
 
     public void mainAction(ProgramInput input)
-            throws InterruptedException, HTTPClientException, IOException, ProcessingException {
+            throws InterruptedException, HTTPClientException, IOException {
         model.processData(input);
         for (View view : views) {
             view.renderView();
