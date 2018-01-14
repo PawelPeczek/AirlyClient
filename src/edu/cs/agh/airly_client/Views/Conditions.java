@@ -7,7 +7,7 @@ package edu.cs.agh.airly_client.Views;
  */
 public enum Conditions {
     OK("/edu/cs/agh/airly_client/ASCII_arts/good.txt"),
-    QuiteOK("/edu/cs/agh/airly_client/ASCII_arts/ASCII_arts/quite_good.txt"),
+    QuiteOK("/edu/cs/agh/airly_client/ASCII_arts/quite_good.txt"),
     Average("/edu/cs/agh/airly_client/ASCII_arts/average.txt"),
     Bad("/edu/cs/agh/airly_client/ASCII_arts/worst_condition.txt"),
     Fatal("/edu/cs/agh/airly_client/ASCII_arts/even_worst.txt");
