@@ -1,5 +1,9 @@
 package edu.cs.agh.airly_client.JSON;
 
+/**
+ * POJO Class that represents Address information
+ * which are possible to receive from server.
+ */
 public class Address {
 
     private String route;

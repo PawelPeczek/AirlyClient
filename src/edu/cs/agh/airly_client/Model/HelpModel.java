@@ -2,7 +2,15 @@ package edu.cs.agh.airly_client.Model;
 
 import edu.cs.agh.airly_client.Parser.ProgramInput;
 
+/**
+ * Model responsible for processing data in helpMode.
+ */
 public class HelpModel extends Model{
+    /**
+     * Implementation of abstract method from Model class.
+     *
+     * @param input Parsed input from command-line.
+     */
     @Override
     public void processData(ProgramInput input) {
         String helpContent = "HELP PAGE:\nParameters allowed in program:\n" +

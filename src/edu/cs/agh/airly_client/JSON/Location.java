@@ -1,5 +1,9 @@
 package edu.cs.agh.airly_client.JSON;
 
+/**
+ * POJO Class that represents location data
+ * which are possible to receive from server.
+ */
 public class Location {
     private String longitude;
 

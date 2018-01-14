@@ -1,5 +1,9 @@
 package edu.cs.agh.airly_client.JSON;
 
+/**
+ * POJO Class that represents extended measurement data
+ * which are possible to receive from server.
+ */
 public class ExtendedMeasurements extends BasicMeasurement {
 
     private Double pm1;

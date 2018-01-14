@@ -1,9 +1,8 @@
-package edu.cs.agh.airly_client.HTTPclient;
+package edu.cs.agh.airly_client.RESTClient;
 
 import com.google.gson.Gson;
 import edu.cs.agh.airly_client.JSON.MapPoint;
 import edu.cs.agh.airly_client.JSON.SingleSensor;
-import edu.cs.agh.airly_client.JSON.SensorData;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,16 +12,40 @@ import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.zip.GZIPInputStream;
 
-public class AirlyAPIClient extends HTTPClient {
+/**
+ * Object that wraps all AirlyAPI functions possible to use
+ * in this application.
+ */
+public class AirlyAPIClient extends RESTClient {
 
+    /**
+     * Object from library that is responsible for parsing JSON to objects.
+     */
     private final Gson Gson = new Gson();
 
+    /**
+     * @param APIKey APIKey to be used in connection.
+     */
     public AirlyAPIClient(String APIKey) {
         super(APIKey);
     }
 
+    /**
+     * Method that provide internal application interface to method
+     * https://airapi.airly.eu/v1/mapPoint/measurements
+     * It maps the JSON server response into object thanks to gson lib.
+     * It also handles connection (opening and closing).
+     *
+     * @param latitude Latitude parameter
+     * @param longitude Longitude parameter
+     * @return MapPoint object which is just mapped JSON response
+     * @throws IOException when error with connection occurs.
+     * @throws InterruptedException when breaking the process while waiting
+     * for reconnect to server.
+     * @throws RESTClientException when 3-times connection try failed.
+     */
     public MapPoint getMeasurementsForMapPoint(Double latitude, Double longitude)
-            throws IOException, HTTPClientException, InterruptedException {
+            throws IOException, RESTClientException, InterruptedException {
         HashMap<String, String> params = new HashMap<>();
         params.put("latitude", latitude.toString());
         params.put("longitude", longitude.toString());
@@ -32,13 +55,26 @@ public class AirlyAPIClient extends HTTPClient {
         String content = obtainJasonFromServerResponse(conn);
         System.out.println("[DEBUG Recieved JSON] " + content);
         MapPoint result = Gson.fromJson(content, MapPoint.class);
-        //MapPoint result = Gson.fromJson(new InputStreamReader(conn.getInputStream()), MapPoint.class);
         conn.disconnect();
         return result;
     }
 
+    /**
+     * Method that provide internal application interface to method
+     * https://airapi.airly.eu/v1/nearestSensor/measurements
+     * It maps the JSON server response into object thanks to gson lib.
+     * It also handles connection (opening and closing).
+     *
+     * @param latitude Latitude parameter
+     * @param longitude Longitude parameter
+     * @return Single object which is just mapped JSON response
+     * @throws IOException when error with connection occurs.
+     * @throws InterruptedException when breaking the process while waiting
+     * for reconnect to server.
+     * @throws RESTClientException when 3-times connection try failed.
+     */
     public SingleSensor getMeasurementForNearestSensor(Double latitude, Double longitude)
-            throws IOException, HTTPClientException, InterruptedException {
+            throws IOException, RESTClientException, InterruptedException {
         HashMap<String, String> params = new HashMap<>();
         params.put("latitude", latitude.toString());
         params.put("longitude", longitude.toString());
@@ -48,28 +84,46 @@ public class AirlyAPIClient extends HTTPClient {
         String content = obtainJasonFromServerResponse(conn);
         System.out.println("[DEBUG Recieved JSON] " + content);
         SingleSensor result = Gson.fromJson(content, SingleSensor.class);
-//        SingleSensor result =
-//                Gson.fromJson(new InputStreamReader(conn.getInputStream()), SingleSensor.class);
         conn.disconnect();
         return result;
     }
 
+    /**
+     * Method that provide internal application interface to method
+     * https://airapi.airly.eu/v1/sensor/measurements
+     * It maps the JSON server response into object thanks to gson lib.
+     * It also handles connection (opening and closing).
+     *
+     * @param sensorID SensorId of requested sensor.
+     * @return Single object which is just mapped JSON response
+     * @throws IOException when error with connection occurs.
+     * @throws InterruptedException when breaking the process while waiting
+     * for reconnect to server.
+     * @throws RESTClientException when 3-times connection try failed.
+     */
     public MapPoint getMeasurementsFromSpecificSensor(Integer sensorID)
-            throws IOException, HTTPClientException, InterruptedException {
+            throws IOException, RESTClientException, InterruptedException {
         HashMap<String, String> params = new HashMap<>();
         params.put("sensorId", sensorID.toString());
         HttpURLConnection conn = prepareConnection(APIMethods.sensorMeasurements, params);
         checkConnectionErrors(conn);
         System.out.println("[DEBUG Server Code] " + conn.getResponseCode());
         String content = obtainJasonFromServerResponse(conn);
-        //MapPoint result = Gson.fromJson(new InputStreamReader(conn.getInputStream()), MapPoint.class);
         System.out.println("[DEBUG Recieved JSON] " + content);
         MapPoint result = Gson.fromJson(content, MapPoint.class);
         conn.disconnect();
         return result;
     }
 
-    private void checkConnectionErrors(HttpURLConnection conn) throws IOException, HTTPClientException {
+    /**
+     * Method that handles with connection errors and wraps it in
+     * RESTClientException with appropriate comments.
+     *
+     * @param conn Connection (opened) object.
+     * @throws IOException when errors with connection occurs.
+     * @throws RESTClientException when not ResponseCode == 200
+     */
+    private void checkConnectionErrors(HttpURLConnection conn) throws IOException, RESTClientException {
         if(conn.getResponseCode() != 200){
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(conn.getErrorStream()));
@@ -79,21 +133,29 @@ public class AirlyAPIClient extends HTTPClient {
                 content.append(inputLine);
             }
             in.close();
+            int responseCode = conn.getResponseCode();
             conn.disconnect();
-            if(conn.getResponseCode() == 500)
-                throw new HTTPClientException("Unexpected error at server-side. Try again later." +
+            if(responseCode == 500)
+                throw new RESTClientException("Unexpected error at server-side. Try again later." +
                         "Server message: " + content.toString());
-            if(conn.getResponseCode() == 401 || conn.getResponseCode() == 403)
-                throw new HTTPClientException("Problem with api-key authorising! Server message: " +
+            if(responseCode == 401 || responseCode == 403)
+                throw new RESTClientException("Problem with api-key authorising! Server message: " +
                         content.toString());
-            throw new HTTPClientException("Serious error occurred. Please contact with the author. " +
+            throw new RESTClientException("Serious error occurred. Please contact with the author. " +
                     "Error code 12-090, Server message: " + content.toString());
         }
     }
 
+    /**
+     * Method that is responsible for obtaining plain text from server JSON response.
+     * @param conn connection (opened) object.
+     * @return JSON obtained from server.
+     * @throws IOException when errors with connection occurs.
+     */
     private String obtainJasonFromServerResponse(HttpURLConnection conn) throws IOException {
         InputStream input = conn.getInputStream();
         System.out.println("[DEBUG conn encoding] " + conn.getContentEncoding());
+        // If response is GZIP compressed.
         if("gzip".equals(conn.getContentEncoding())){
             System.out.println("Changing InputStream into GZIPInputStream");
             input = new GZIPInputStream(input);

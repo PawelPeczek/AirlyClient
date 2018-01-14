@@ -1,25 +1,62 @@
-package edu.cs.agh.airly_client.HTTPclient;
+package edu.cs.agh.airly_client.RESTClient;
 
 import java.io.*;
 import java.net.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HTTPClient {
+/**
+ * Class responsible for sending GET requests to server and receiving
+ * answers.
+ */
+public class RESTClient {
+    /**
+     * APIKey used to authenticate at the server side.
+     */
     private final String APIKey;
+    /**
+     * Base URL to connect.
+     */
     private final String URLBase = "https://airapi.airly.eu";
 
-    public HTTPClient(String APIKey){
+    /**
+     * @param APIKey Given APIKey to be used.
+     */
+    protected RESTClient(String APIKey){
         this.APIKey =  APIKey;
     }
 
+    /**
+     * Method responsible for preparing valid HttpURLConnection
+     * for request.
+     *
+     * @param method REST API Method to be used.
+     * @param params Parameters of the method
+     * @return Valid HttpURLConnection object with all options prepared.
+     * @throws IOException when error with connection occurs.
+     * @throws InterruptedException when breaking the process while waiting
+     * for reconnect to server.
+     * @throws RESTClientException when 3-times connection try failed.
+     */
     protected HttpURLConnection prepareConnection(APIMethods method, HashMap<String, String> params)
-            throws IOException, InterruptedException, HTTPClientException {
+            throws IOException, InterruptedException, RESTClientException {
         return prepareConnection(BuildURL(method, params));
     }
 
+    /**
+     * Method responsible for preparing valid HttpURLConnection
+     * for request.
+     *
+     * @param methodAndParams URL prepared to be used (only relative path -
+     *                        the part of URL after URLBase!).
+     * @return Valid HttpURLConnection object with all options prepared.
+     * @throws IOException when error with connection occurs.
+     * @throws InterruptedException when breaking the process while waiting
+     * for reconnect to server.
+     * @throws RESTClientException when 3-times connection try failed.
+     */
     protected HttpURLConnection prepareConnection(String methodAndParams)
-            throws IOException, InterruptedException, HTTPClientException {
+            throws IOException, InterruptedException, RESTClientException {
         System.out.println("[DEBUG URL] " + URLBase + methodAndParams);
         System.out.println("[DEBUG API] " + APIKey);
         URL url = new URL(URLBase + methodAndParams);
@@ -39,7 +76,7 @@ public class HTTPClient {
                 counter = 3;
             } catch (UnknownHostException ex){
                 if(counter == 2){
-                  throw new HTTPClientException("Couldn't connect to server with 3 tries...", ex);
+                  throw new RESTClientException("Couldn't connect to server with 3 tries...", ex);
                 }
                 counter++;
                 Thread.sleep(3000);
@@ -49,6 +86,14 @@ public class HTTPClient {
         return conn;
     }
 
+    /**
+     * Method responsible for building URL from method name and params.
+     *
+     * @param method Method to be used.
+     * @param params Parameters of the method.
+     * @return Relative URL (without URLBase).
+     * @throws UnsupportedEncodingException when URLEncoder error occurs.
+     */
     private String BuildURL(APIMethods method, HashMap<String, String> params) throws UnsupportedEncodingException {
         StringBuilder result = new StringBuilder();
         result.append(method.methodName);

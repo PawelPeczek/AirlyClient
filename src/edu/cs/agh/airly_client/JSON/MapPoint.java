@@ -3,6 +3,10 @@ package edu.cs.agh.airly_client.JSON;
 
 import java.util.LinkedList;
 
+/**
+ * POJO Class that represents basic MapPoint data
+ * which are possible to receive from server.
+ */
 public class MapPoint {
     private ExtendedMeasurements currentMeasurements;
     private LinkedList<SensorData> forecast = new LinkedList<>();

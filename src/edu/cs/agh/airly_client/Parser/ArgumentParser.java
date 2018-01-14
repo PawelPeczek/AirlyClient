@@ -114,7 +114,8 @@ public class ArgumentParser {
      * or --sensor-id was set.
      *
      * @param optTypesDetected Mapping from ValidOptions.names -> number of args
-     * @throws ArgumentsParserException
+     * @throws ArgumentsParserException when errors occurred while checking
+     * (more than one main option selected)
      */
     private void onlyOneMainOption(HashMap<String, Integer> optTypesDetected)
             throws ArgumentsParserException {
@@ -123,14 +124,24 @@ public class ArgumentParser {
            (optTypesDetected.containsKey(ValidOptions.sensorId.name()) ||
             optTypesDetected.containsKey(ValidOptions.latitude.name()) ||
             optTypesDetected.containsKey(ValidOptions.longitude.name())))
+            // --h and one of others
             error = true;
         else if((optTypesDetected.containsKey(ValidOptions.latitude.name()) ||
                 optTypesDetected.containsKey(ValidOptions.longitude.name())) &&
                 optTypesDetected.containsKey(ValidOptions.sensorId.name()))
+            // both --latitude/--longitude and --sensor-id
             error = true;
         if(error) throw new ArgumentsParserException("Invalid arguments - check --h");
     }
 
+    /**
+     * Helper method that is responsible for getting the value of AIRLY_API_KEY environmental
+     * variable.
+     *
+     * @return Value of AIRLY_API_KEY variable.
+     * @throws ArgumentsParserException when AIRLY_API_KEY variable doesn't exist or its
+     * value doesn't follow required APIKey pattern.
+     */
     private String getAPIKeyFromEnv() throws ArgumentsParserException{
         String result;
         Map<String, String> env = System.getenv();
@@ -143,24 +154,39 @@ public class ArgumentParser {
         return result;
     }
 
+    /**
+     * Method is responsible for providing to ProgramInput object all user
+     * options that are connected with --sensor-id option mode.
+     *
+     * @param progInput Partially created ProgramInput object.
+     * @param args Command line arguments.
+     * @param optTypesDetected Mapping from ValidOptions.names -> number of args
+     * @throws ArgumentsParserException when error while setting sensorId occurs.
+     */
     private void provideSingleSensorInputInfo(ProgramInput progInput, String[] args,
                                               HashMap<String, Integer> optTypesDetected)
             throws ArgumentsParserException {
-        if(optTypesDetected.containsKey(ValidOptions.latitude.name()) &&
-                optTypesDetected.containsKey(ValidOptions.longitude.name())){
-            throw new ArgumentsParserException("Valid arguments are either (latitude, longitude) or sensorId.");
-        }
         Integer sensorId = provideSensorId(args[optTypesDetected.get(ValidOptions.sensorId.name())]);
         progInput.setSensorId(sensorId);
         progInput.setRunningMode(RunningMode.sensorMeasurements);
     }
 
+    /**
+     * Method is responsible for providing to ProgramInput object all user
+     * options that are connected with --longitude/-latitude option mode.
+     *
+     * @param progInput Partially created ProgramInput object.
+     * @param args Command line arguments.
+     * @param optTypesDetected Mapping from ValidOptions.names -> number of args
+     * @throws IllegalArgumentException when illegal arguments passed to
+     * setLatitude or setLongitude
+     */
     private void provideNearestSensorInputInfo(ProgramInput progInput, String[] args,
-                                               HashMap<String, Integer> optTypesDetected)
-            throws ArgumentsParserException {
-        if(optTypesDetected.containsKey(ValidOptions.sensorId.name()))
-            throw new ArgumentsParserException("Valid arguments are either (latitude, longitude) or sensorId.");
+                                               HashMap<String, Integer> optTypesDetected) {
+        // Checking if user wants to see nearest sensor (to the given --lat./--long.) sensor system details
+        // or its measurements.
         if(optTypesDetected.containsKey(ValidOptions.sensorInfo.name())) {
+            // --sensor-info in this context is absolutely fine.
             progInput.setRunningMode(RunningMode.sensorDetails);
             progInput.setUnsupportedSensDetails(false);
         }
@@ -171,12 +197,30 @@ public class ArgumentParser {
         progInput.setLongitude(longitude);
     }
 
+    /**
+     * Method responsible for equipping ProgramInput object with APIKey (either from
+     * command line args or environmental variable).
+     *
+     * @param progInput Partially created ProgramInput object.
+     * @param APIKey APIKey from args (or null if not given in args)
+     * @throws ArgumentsParserException when APIKey not given neither in command line
+     * args nor in environment or when errors with getAPIKeyFromEnv() or setAPIKey()
+     * occurs.
+     */
     private void provideInputInfoWithAPIKey(ProgramInput progInput, String APIKey)
             throws ArgumentsParserException {
         if(APIKey != null) progInput.setAPIKey(provideApiFromArgumentString(APIKey));
         else progInput.setAPIKey(getAPIKeyFromEnv());
     }
 
+    /**
+     * Method converts --sensor-id=val into Integer(val) if possible.
+     *
+     * @param arg --sensor-id argument.
+     * @return Integer value of sensor id.
+     * @throws IllegalArgumentException when cannot find val associated
+     * to --sensor-id.
+     */
     private Integer provideSensorId(String arg){
         Matcher matcher = ValidOptions.sensorId.pattern.matcher(arg);
         Integer result;
@@ -187,6 +231,14 @@ public class ArgumentParser {
     }
 
 
+    /**
+     * Method responsible for converting --latitude=val/--longitude=val into Double(val).
+     *
+     * @param arg --latitude=val/--longitude=val option from command line.
+     * @return Double value of --latitude/--longitude.
+     * @throws IllegalArgumentException when cannot find val associated
+     * to --sensor-id.
+     */
     private Double provideCoordValue(String arg){
         Matcher[] matchers = {
                         ValidOptions.latitude.pattern.matcher(arg),
@@ -203,6 +255,12 @@ public class ArgumentParser {
         return result;
     }
 
+    /**
+     * Method responsible for converting --api-key=val into String(val).
+     *
+     * @param arg --api-key option from command line.
+     * @return String value of APIKey.
+     */
     private String provideApiFromArgumentString(String arg){
         Matcher matcher = ValidOptions.APIKey.pattern.matcher(arg);
         String result;

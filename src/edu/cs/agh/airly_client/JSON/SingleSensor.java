@@ -1,5 +1,9 @@
 package edu.cs.agh.airly_client.JSON;
 
+/**
+ * POJO Class that represents basic SingleSensor data
+ * which are possible to receive from server.
+ */
 public class SingleSensor extends BasicMeasurement {
     private Integer id;
 
