@@ -274,11 +274,16 @@ public abstract class View {
      * Method responsible for formatting basic pollution data from server response.
      *
      * @param measurement Measurement data from server response.
-     * @return Pollution data in a nice, readable format.
+     * @return Pollution data in a nice, readable format. N/A if no data given!
      */
     private String generateBasicPolutionInfo(BasicMeasurement measurement){
         StringBuilder result = new StringBuilder();
+        boolean onlyNA = true;
         if(measurement != null){
+            if(measurement.getAirQualityIndex() != null ||
+               measurement.getPollutionLevel() != null ||
+               measurement.getPm10() != null ||
+               measurement.getPm25() != null) onlyNA = false;
             result.append("AirQualityIndex: ")
                   .append(measurement.getAirQualityIndex() != null ?
                             Math.round(measurement.getAirQualityIndex()) : "N/A")
@@ -293,6 +298,10 @@ public abstract class View {
                             mapPMToColor(measurement.getPm25()) +
                             Math.round(measurement.getPm25()) + ANSI_RESET : "N/A");
         }
+        if(onlyNA){
+            result.delete(0, result.length());
+            result.append("N/A");
+        }
         return result.toString();
     }
 
@@ -305,6 +314,7 @@ public abstract class View {
      */
     protected String generateHistoricalStats(LinkedList<SensorData> history){
         StringBuilder result = new StringBuilder();
+        boolean onlyNA = true;
         if(history != null){
             for(SensorData entry : history){
                 if(entry.getMeasurements() == null) continue;
@@ -313,11 +323,17 @@ public abstract class View {
                 result.append(" to: ");
                 result.append(formatMeasurementTime(entry.getTillDateTime()));
                 result.append("\n");
-                result.append(generateBasicPolutionInfo(entry.getMeasurements()));
+                String lastMethInvocationRes;
+                lastMethInvocationRes = generateBasicPolutionInfo(entry.getMeasurements());
+                if(!lastMethInvocationRes.equals("N/A")) onlyNA = false;
+                result.append(lastMethInvocationRes);
                 result.append("\n\n");
             }
         }
-        if(result.length() == 0) result.append("No data!");
+        if(onlyNA) {
+            result.delete(0, result.length());
+            result.append("No data!");
+        }
         return result.toString();
     }
 }
