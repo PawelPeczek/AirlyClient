@@ -8,4 +8,8 @@ public class ArgumentsParserException extends Exception {
     public ArgumentsParserException(String message) { super(message); }
     public ArgumentsParserException(String message, Throwable cause) { super(message, cause); }
     public ArgumentsParserException(Throwable cause) { super(cause); }
+    @Override
+    public String toString() {
+        return getMessage() != null ? getMessage() : "No error message provided.";
+    }
 }

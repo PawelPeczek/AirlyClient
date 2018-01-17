@@ -5,12 +5,16 @@ import edu.cs.agh.airly_client.RESTClient.AirlyAPIClient;
 
 import java.util.concurrent.Callable;
 
-public class SinglePointThread extends AirlyThread implements Callable<SingleSensor> {
-    public SinglePointThread(AirlyAPIClient APIObject, Integer sensorId) {
+/**
+ * Class represents an object implements Callable that
+ * is able to run task in parallel.
+ */
+public class SinglePointTask extends AirlyTask implements Callable<SingleSensor> {
+    public SinglePointTask(AirlyAPIClient APIObject, Integer sensorId) {
         super(APIObject, sensorId);
     }
 
-    public SinglePointThread(AirlyAPIClient APIObject, Double longitude, Double latitude) {
+    public SinglePointTask(AirlyAPIClient APIObject, Double longitude, Double latitude) {
         super(APIObject, longitude, latitude);
     }
 

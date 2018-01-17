@@ -5,15 +5,14 @@ import edu.cs.agh.airly_client.JSON.MapPoint;
 import edu.cs.agh.airly_client.JSON.SingleSensor;
 import edu.cs.agh.airly_client.Parser.ProgramInput;
 import edu.cs.agh.airly_client.Views.View;
-
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Abstract class that represent basic Model.
  */
 public abstract class Model {
-
     /**
      * Views which observes specific model.
      */
@@ -37,8 +36,11 @@ public abstract class Model {
      * @throws InterruptedException when somewhat process is killed while
      * trying to reconnect to server.
      * @throws RESTClientException when inner RESTClient error occurs.
+     * @throws ExecutionException when some error while parallel execution
+     * occurs.
      */
-    public abstract void processData(ProgramInput input) throws IOException, InterruptedException, RESTClientException;
+    public abstract void processData(ProgramInput input)
+            throws IOException, InterruptedException, RESTClientException, ExecutionException;
 
     /**
      * Method responsible for notifying observers about changes in state of model object.
@@ -81,4 +83,5 @@ public abstract class Model {
                 && obj.getCurrentMeasurements().getAirQualityIndex() == null)) result = true;
         return result;
     }
+
 }

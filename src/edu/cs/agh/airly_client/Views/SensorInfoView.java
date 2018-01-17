@@ -5,7 +5,7 @@ import edu.cs.agh.airly_client.JSON.SingleSensor;
 /**
  * View associated with mode --latitude/--longitude (with --sensor-info)
  */
-public class NearestSensorInfoView extends View{
+public class SensorInfoView extends View{
     /**
      * Implementation of abstract method from base class.
      * Method checks if appropriate view element is present in data HashMap
@@ -14,30 +14,26 @@ public class NearestSensorInfoView extends View{
     @Override
     public void renderView() {
         System.out.println(generateHeaderMessage());
-        System.out.println("See how good the air quality is:\n");
+        System.out.println("See details of chosen sensor:\n");
         if (data.containsKey("SensorInfo")){
             SingleSensor nearestSensor = (SingleSensor) (data.get("SensorInfo"));
-            if(data.containsKey("EmptyObject") && data.get("EmptyObject").equals(Boolean.TRUE))
+            if(data.containsKey("EmptyInfoObject") && data.get("EmptyInfoObject").equals(Boolean.TRUE))
                 System.out.println("Info data for sensor unavailable");
             else {
-                System.out.println(generateAsciiArt(nearestSensor.getPollutionLevel()));
                 System.out.println(generateInfoAboutSensor(nearestSensor));
-                if (data.containsKey("HistoryMode") && data.get("HistoryMode").equals(Boolean.TRUE))
-                    System.out.println(ANSI_YELLOW + "WARNING!" + ANSI_RESET
-                            + "\n--sensor-info doesn't work with --history");
             }
-        } else System.out.println(generateNotFoundElementMessage("nearest sensor info"));
+        } else System.out.println(generateNotFoundElementMessage("sensor info"));
     }
 
     /**
      * Implementation of abstract method from base class.
-     * @return NearestSensorInfoView header.
+     * @return SensorInfoView header.
      */
     @Override
     protected String generateHeaderMessage() {
         return "\n******************************************************************\n" +
                 "*                                                                *\n" +
-                "*                        Nearest sensor info                     *\n" +
+                "*                          Sensor details                        *\n" +
                 "*                                                                *\n" +
                 "******************************************************************\n";
     }

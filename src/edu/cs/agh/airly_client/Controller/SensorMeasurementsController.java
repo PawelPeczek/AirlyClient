@@ -1,14 +1,14 @@
 package edu.cs.agh.airly_client.Controller;
 
-import edu.cs.agh.airly_client.Model.NearestSensorMeasurementModel;
+import edu.cs.agh.airly_client.Model.SensorMeasurementModel;
 import edu.cs.agh.airly_client.Views.SensorMeasurementView;
 
 /**
- * Controller assigned to nearestMeasurements mode
+ * Controller assigned to nearestMeasurements and sensorMeasurements modes
  */
-public class NearestSensorMeasurementsController extends Controller {
-    public NearestSensorMeasurementsController(){
-        model = new NearestSensorMeasurementModel();
+public class SensorMeasurementsController extends Controller {
+    public SensorMeasurementsController(){
+        model = new SensorMeasurementModel();
         views.add(new SensorMeasurementView());
         model.addObserver(views);
     }

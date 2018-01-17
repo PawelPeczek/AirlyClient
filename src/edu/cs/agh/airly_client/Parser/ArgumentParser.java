@@ -92,7 +92,7 @@ public class ArgumentParser {
             result.setHistoryTrue();
         if(optTypesDetected.containsKey(ValidOptions.sensorInfo.name()))
             // default initialize - set to false if needed
-            result.setUnsupportedSensDetails(true);
+            result.setSensorDetailsWithId(true);
         if(optTypesDetected.containsKey(ValidOptions.help.name())){
             result.setRunningMode(RunningMode.helpMode);
         } else if(optTypesDetected.containsKey(ValidOptions.latitude.name()) &&
@@ -190,7 +190,7 @@ public class ArgumentParser {
         if(optTypesDetected.containsKey(ValidOptions.sensorInfo.name())) {
             // --sensor-info in this context is absolutely fine.
             progInput.setRunningMode(RunningMode.sensorDetails);
-            progInput.setUnsupportedSensDetails(false);
+            progInput.setSensorDetailsWithId(false);
         }
         else progInput.setRunningMode(RunningMode.nearestMeasurements);
         Double latitude = provideCoordValue(args[optTypesDetected.get(ValidOptions.latitude.name())]);

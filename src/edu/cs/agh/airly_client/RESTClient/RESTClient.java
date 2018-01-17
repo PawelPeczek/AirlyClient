@@ -69,7 +69,8 @@ public class RESTClient {
         int counter = 0;
         while(counter < 3){
             try {
-                System.out.println("Application is trying to connect...");
+                if(counter != 0)
+                    System.out.println("Application is trying to reconnect...");
                 conn.connect();
                 counter = 3;
             } catch (UnknownHostException ex){

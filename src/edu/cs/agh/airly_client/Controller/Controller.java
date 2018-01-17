@@ -8,6 +8,7 @@ import edu.cs.agh.airly_client.Views.View;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.concurrent.ExecutionException;
 
 
 /**
@@ -33,9 +34,11 @@ public abstract class Controller {
      * @throws InterruptedException when program is terminated while
      * trying to reconnect to server.
      * @throws RESTClientException when internal RESTClient error occurs.
+     * @throws ExecutionException when parallel execution error occurs.
      */
     public void mainAction(ProgramInput input)
-            throws InterruptedException, RESTClientException, IOException {
+            throws InterruptedException, RESTClientException, IOException,
+            ExecutionException {
         model.processData(input);
         for (View view : views) {
             view.renderView();

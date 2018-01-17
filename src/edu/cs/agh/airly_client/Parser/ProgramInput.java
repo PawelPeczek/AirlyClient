@@ -38,7 +38,7 @@ public class ProgramInput {
     /**
      * determines whether --sensor-details was set with connection to --sensor-id
      */
-    private boolean unsupportedSensDetails = false;
+    private boolean sensorDetailsWithId = false;
 
     /**
      * Latitude getter.
@@ -162,18 +162,18 @@ public class ProgramInput {
     /**
      * UnsupportedSensDetails getter.
      *
-     * @return Value of unsupportedSensDetails.
+     * @return Value of sensorDetailsWithId.
      */
-    public boolean isUnsupportedSensDetails() {
-        return unsupportedSensDetails;
+    public boolean isSensorDetailsWithId() {
+        return sensorDetailsWithId;
     }
 
     /**
      * UnsupportedSensDetails setter.
      *
-     * @param val New value of unsupportedSensDetails.
+     * @param val New value of sensorDetailsWithId.
      */
-    public void setUnsupportedSensDetails(boolean val) {
-        this.unsupportedSensDetails = val;
+    public void setSensorDetailsWithId(boolean val) {
+        this.sensorDetailsWithId = val;
     }
 }

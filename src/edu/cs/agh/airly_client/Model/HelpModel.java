@@ -18,7 +18,7 @@ public class HelpModel extends Model{
                 "--sensor-id=val - presenting data from specific sensor\n" +
                 "--api-key=val - (optional) API key\n" +
                 "--history - (optional) showing earlier measurements\n" +
-                "--sensor-info - (optional) with latitude/longitude - showing location details of nearest sensor";
+                "--sensor-info - (optional) - showing location details of nearest sensor";
         notifyViews("HelpContent", helpContent);
     }
 }

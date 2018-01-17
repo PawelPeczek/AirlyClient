@@ -7,7 +7,8 @@ package edu.cs.agh.airly_client.RESTClient;
 public enum APIMethods {
     mapPoint("/v1/mapPoint/measurements"),
     nearestSensor("/v1/nearestSensor/measurements"),
-    sensorMeasurements("/v1/sensor/measurements");
+    sensorMeasurements("/v1/sensor/measurements"),
+    sensorInfoById("/v1/sensors/");
 
     public final String methodName;
     private APIMethods(String methodName){

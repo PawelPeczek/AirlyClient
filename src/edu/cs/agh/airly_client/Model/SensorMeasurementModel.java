@@ -11,7 +11,7 @@ import java.io.IOException;
  *  Model responsible for handing with nearestMeasurements and sensorMeasurements
  *  running mode.
  */
-public class NearestSensorMeasurementModel extends Model{
+public class SensorMeasurementModel extends Model{
     /**
      * Implementation of abstract method from Model class.
      *
