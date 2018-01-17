@@ -20,8 +20,8 @@ public class Program {
             System.out.println("Program was terminated while attempting one of three tries to connect to server");
         } catch (Exception e){
             System.out.println("Some serious exception. Please contact the creator. Error message:");
-            System.out.println(e.getMessage());
-            e.printStackTrace();
+            if(e.getMessage() != null) System.out.println(e.getMessage());
+            else System.out.println("No message given.");
         }
 
     }

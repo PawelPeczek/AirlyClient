@@ -57,8 +57,6 @@ public class RESTClient {
      */
     protected HttpURLConnection prepareConnection(String methodAndParams)
             throws IOException, InterruptedException, RESTClientException {
-        //System.out.println("[DEBUG URL] " + URLBase + methodAndParams);
-        //System.out.println("[DEBUG API] " + APIKey);
         URL url = new URL(URLBase + methodAndParams);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestProperty("Content-Type", "application/json");

@@ -14,7 +14,7 @@ public class HelpModel extends Model{
     @Override
     public void processData(ProgramInput input) {
         String helpContent = "HELP PAGE:\nParameters allowed in program:\n" +
-                "--latitude=val both with --longitude=val - presenting data for nearest sensor\n" +
+                "--latitude=val both with --longitude=val - presenting data for nearest sensor (. as decimal separator)\n" +
                 "--sensor-id=val - presenting data from specific sensor\n" +
                 "--api-key=val - (optional) API key\n" +
                 "--history - (optional) showing earlier measurements\n" +

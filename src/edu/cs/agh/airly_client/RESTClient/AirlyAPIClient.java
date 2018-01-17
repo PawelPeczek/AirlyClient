@@ -51,9 +51,7 @@ public class AirlyAPIClient extends RESTClient {
         params.put("longitude", longitude.toString());
         HttpURLConnection conn = prepareConnection(APIMethods.mapPoint, params);
         checkConnectionErrors(conn);
-        //System.out.println("[DEBUG Server Code] " + conn.getResponseCode());
         String content = obtainJasonFromServerResponse(conn);
-        //System.out.println("[DEBUG Recieved JSON] " + content);
         MapPoint result = Gson.fromJson(content, MapPoint.class);
         conn.disconnect();
         return result;
@@ -80,9 +78,7 @@ public class AirlyAPIClient extends RESTClient {
         params.put("longitude", longitude.toString());
         HttpURLConnection conn = prepareConnection(APIMethods.nearestSensor, params);
         checkConnectionErrors(conn);
-        //System.out.println("[DEBUG Server Code] " + conn.getResponseCode());
         String content = obtainJasonFromServerResponse(conn);
-        //System.out.println("[DEBUG Recieved JSON] " + content);
         SingleSensor result = Gson.fromJson(content, SingleSensor.class);
         conn.disconnect();
         return result;
@@ -107,9 +103,7 @@ public class AirlyAPIClient extends RESTClient {
         params.put("sensorId", sensorID.toString());
         HttpURLConnection conn = prepareConnection(APIMethods.sensorMeasurements, params);
         checkConnectionErrors(conn);
-        //System.out.println("[DEBUG Server Code] " + conn.getResponseCode());
         String content = obtainJasonFromServerResponse(conn);
-        //System.out.println("[DEBUG Recieved JSON] " + content);
         MapPoint result = Gson.fromJson(content, MapPoint.class);
         conn.disconnect();
         return result;
@@ -154,10 +148,7 @@ public class AirlyAPIClient extends RESTClient {
      */
     private String obtainJasonFromServerResponse(HttpURLConnection conn) throws IOException {
         InputStream input = conn.getInputStream();
-        //System.out.println("[DEBUG conn encoding] " + conn.getContentEncoding());
-        // If response is GZIP compressed.
         if("gzip".equals(conn.getContentEncoding())){
-            //System.out.println("Changing InputStream into GZIPInputStream");
             input = new GZIPInputStream(input);
         }
         BufferedReader in = new BufferedReader(
