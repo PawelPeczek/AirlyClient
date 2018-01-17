@@ -2,15 +2,16 @@ package edu.cs.agh.airly_client.Model;
 
 import edu.cs.agh.airly_client.RESTClient.AirlyAPIClient;
 import edu.cs.agh.airly_client.RESTClient.RESTClientException;
-import edu.cs.agh.airly_client.JSON.SingleSensor;
+import edu.cs.agh.airly_client.JSON.MapPoint;
 import edu.cs.agh.airly_client.Parser.ProgramInput;
 
 import java.io.IOException;
 
 /**
- *  Model responsible for handing with sensorDetails running mode.
+ *  Model responsible for handing with nearestMeasurements and sensorMeasurements
+ *  running mode.
  */
-public class NearestSensorInfoModel extends Model {
+public class NearestSensorMeasurementModel extends Model{
     /**
      * Implementation of abstract method from Model class.
      *
@@ -24,11 +25,15 @@ public class NearestSensorInfoModel extends Model {
     public void processData(ProgramInput input)
             throws IOException, InterruptedException, RESTClientException {
         AirlyAPIClient AirlyAPI = new AirlyAPIClient(input.getAPIKey());
-        SingleSensor data = AirlyAPI.getMeasurementForNearestSensor(input.getLatitude(), input.getLongitude());
+        MapPoint data;
+        if(input.getSensorId() == null)
+            data = AirlyAPI.getMeasurementsForMapPoint(input.getLatitude(), input.getLongitude());
+        else
+            data = AirlyAPI.getMeasurementsFromSpecificSensor(input.getSensorId());
         if(isObjectEmpty(data)) notifyViews("EmptyObject", Boolean.TRUE);
         else notifyViews("EmptyObject", Boolean.FALSE);
-        notifyViews("SensorInfo", data);
-        if(input.isHistory()) notifyViews("HistoryMode", Boolean.TRUE);
-        else notifyViews("HistoryMode",  Boolean.FALSE);
+        notifyViews("SensorData", data);
+        if(input.isHistory()) notifyViews("HistoryMode", true);
+        else notifyViews("HistoryMode", false);
     }
 }

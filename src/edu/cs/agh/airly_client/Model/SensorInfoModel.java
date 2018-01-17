@@ -2,15 +2,15 @@ package edu.cs.agh.airly_client.Model;
 
 import edu.cs.agh.airly_client.RESTClient.AirlyAPIClient;
 import edu.cs.agh.airly_client.RESTClient.RESTClientException;
-import edu.cs.agh.airly_client.JSON.MapPoint;
+import edu.cs.agh.airly_client.JSON.SingleSensor;
 import edu.cs.agh.airly_client.Parser.ProgramInput;
 
 import java.io.IOException;
 
 /**
- * Model responsible for handing with sensorMeasurements running mode.
+ *  Model responsible for handing with sensorDetails running mode.
  */
-public class SpecSensorModel extends Model{
+public class NearestSensorInfoModel extends Model {
     /**
      * Implementation of abstract method from Model class.
      *
@@ -22,15 +22,13 @@ public class SpecSensorModel extends Model{
      */
     @Override
     public void processData(ProgramInput input)
-            throws InterruptedException, RESTClientException, IOException {
+            throws IOException, InterruptedException, RESTClientException {
         AirlyAPIClient AirlyAPI = new AirlyAPIClient(input.getAPIKey());
-        MapPoint data = AirlyAPI.getMeasurementsFromSpecificSensor(input.getSensorId());
+        SingleSensor data = AirlyAPI.getInfoABoutSingleSensor(input.getLatitude(), input.getLongitude());
         if(isObjectEmpty(data)) notifyViews("EmptyObject", Boolean.TRUE);
         else notifyViews("EmptyObject", Boolean.FALSE);
-        notifyViews("SensorData", data);
+        notifyViews("SensorInfo", data);
         if(input.isHistory()) notifyViews("HistoryMode", Boolean.TRUE);
-        else notifyViews("HistoryMode", Boolean.FALSE);
-        if(input.isUnsupportedSensDetails()) notifyViews("SensorDetailsMode", Boolean.TRUE);
-        else notifyViews("SensorDetailsMode", Boolean.FALSE);
+        else notifyViews("HistoryMode",  Boolean.FALSE);
     }
 }
