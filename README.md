@@ -14,5 +14,6 @@ Things I tried to achieve in this project:
 * Simple REST Client implementation
 * Getting know how MVC works
 * Getting know how threading in Java works.
+
 If you notice some mistakes please let me know.
  
