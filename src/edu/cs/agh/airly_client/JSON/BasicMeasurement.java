@@ -55,4 +55,8 @@ public abstract class BasicMeasurement {
     public void setPm25(Double pm25) {
         this.pm25 = pm25;
     }
+
+    public boolean isFulfilled(){
+        return (pm10 != null && pm25 != null && airQualityIndex != null && pollutionLevel != null);
+    }
 }

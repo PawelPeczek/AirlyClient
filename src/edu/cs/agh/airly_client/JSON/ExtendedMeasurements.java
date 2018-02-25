@@ -39,6 +39,11 @@ public class ExtendedMeasurements extends BasicMeasurement {
         this.pollutionLevel = pollutionLevel;
     }
 
+    @Override
+    public boolean isFulfilled() {
+        return (pm1 != null && super.isFulfilled());
+    }
+
     public Double getHumidity () {
         return humidity;
     }

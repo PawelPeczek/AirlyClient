@@ -61,11 +61,7 @@ public abstract class Model {
      * @return Check status.
      */
     protected boolean isObjectEmpty(SingleSensor obj){
-        boolean result = false;
-        if(obj == null ||
-                (obj.getId() == null && obj.getPm10() == null && obj.getName() == null && obj.getPm25() == null
-                && obj.getAirQualityIndex() == null && obj.getVendor() == null)) result = true;
-        return result;
+        return (obj == null || !obj.isFulfilled());
     }
 
     /**
@@ -75,13 +71,8 @@ public abstract class Model {
      * @return Check status.
      */
     protected boolean isObjectEmpty(MapPoint obj){
-        boolean result = false;
-        if(obj == null || obj.getCurrentMeasurements() == null ||
-                (obj.getCurrentMeasurements().getPm1() == null && obj.getCurrentMeasurements().getPm10() == null
-                && obj.getCurrentMeasurements().getPm25() == null
-                && obj.getCurrentMeasurements().getPollutionLevel() == null
-                && obj.getCurrentMeasurements().getAirQualityIndex() == null)) result = true;
-        return result;
+        return (obj == null || obj.getCurrentMeasurements() == null ||
+                !obj.getCurrentMeasurements().isFulfilled());
     }
 
 }
