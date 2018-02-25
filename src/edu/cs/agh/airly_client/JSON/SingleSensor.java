@@ -81,4 +81,9 @@ public class SingleSensor extends BasicMeasurement {
                 ", pm25=" + pm25 +
                 "]";
     }
+
+    public boolean isFulfilled(){
+        return (id != null && name != null && vendor != null &&
+                super.isFulfilled());
+    }
 }
