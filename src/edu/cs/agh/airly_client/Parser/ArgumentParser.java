@@ -82,31 +82,31 @@ public class ArgumentParser {
             throws ArgumentsParserException {
         ProgramInput result = new ProgramInput();
         // Need of mapping from ValidOption name to number of argument.
-        HashMap<String, Integer> optTypesDetected = new HashMap<>();
+        HashMap<ValidOptions, Integer> optTypesDetected = new HashMap<>();
         for(int i = 0; i < assignation.length; i++){
-            optTypesDetected.put(assignation[i].name(), i);
+            optTypesDetected.put(assignation[i], i);
         }
         // check if there is only one main option --h or --latitude/--longitude or --sensor-id
         onlyOneMainOption(optTypesDetected);
-        if(optTypesDetected.containsKey(ValidOptions.history.name()))
+        if(optTypesDetected.containsKey(ValidOptions.history))
             result.setHistoryTrue();
-        if(optTypesDetected.containsKey(ValidOptions.sensorInfo.name()))
+        if(optTypesDetected.containsKey(ValidOptions.sensorInfo))
             // default initialize - set to false if needed
             result.setSensorDetailsWithId(true);
-        if(optTypesDetected.containsKey(ValidOptions.help.name())){
+        if(optTypesDetected.containsKey(ValidOptions.help)){
             result.setRunningMode(RunningMode.helpMode);
-        } else if(optTypesDetected.containsKey(ValidOptions.latitude.name()) &&
-                optTypesDetected.containsKey(ValidOptions.longitude.name())){
+        } else if(optTypesDetected.containsKey(ValidOptions.latitude) &&
+                optTypesDetected.containsKey(ValidOptions.longitude)){
             // --latitude/--longitude mode -> now configuring its options.
             provideNearestSensorInputInfo(result, args, optTypesDetected);
-        } else if(optTypesDetected.containsKey(ValidOptions.sensorId.name())){
+        } else if(optTypesDetected.containsKey(ValidOptions.sensorId)){
             // --sensor-id mode -> now configuring its options.
             provideSingleSensorInputInfo(result, args, optTypesDetected);
         } else throw new ArgumentsParserException("Invalid arguments - check --h");
         // inserting APIKey data to output
-        if(!optTypesDetected.containsKey(ValidOptions.help.name())){
-            provideInputInfoWithAPIKey(result, optTypesDetected.containsKey(ValidOptions.APIKey.name())
-                    ? args[optTypesDetected.get(ValidOptions.APIKey.name())] : null);
+        if(!optTypesDetected.containsKey(ValidOptions.help)){
+            provideInputInfoWithAPIKey(result, optTypesDetected.containsKey(ValidOptions.APIKey)
+                    ? args[optTypesDetected.get(ValidOptions.APIKey)] : null);
         }
         return result;
     }
@@ -119,18 +119,18 @@ public class ArgumentParser {
      * @throws ArgumentsParserException when errors occurred while checking
      * (more than one main option selected)
      */
-    private void onlyOneMainOption(HashMap<String, Integer> optTypesDetected)
+    private void onlyOneMainOption(HashMap<ValidOptions, Integer> optTypesDetected)
             throws ArgumentsParserException {
         boolean error = false;
-        if(optTypesDetected.containsKey(ValidOptions.help.name()) &&
-           (optTypesDetected.containsKey(ValidOptions.sensorId.name()) ||
-            optTypesDetected.containsKey(ValidOptions.latitude.name()) ||
-            optTypesDetected.containsKey(ValidOptions.longitude.name())))
+        if(optTypesDetected.containsKey(ValidOptions.help) &&
+           (optTypesDetected.containsKey(ValidOptions.sensorId) ||
+            optTypesDetected.containsKey(ValidOptions.latitude) ||
+            optTypesDetected.containsKey(ValidOptions.longitude)))
             // --h and one of others
             error = true;
-        else if((optTypesDetected.containsKey(ValidOptions.latitude.name()) ||
-                optTypesDetected.containsKey(ValidOptions.longitude.name())) &&
-                optTypesDetected.containsKey(ValidOptions.sensorId.name()))
+        else if((optTypesDetected.containsKey(ValidOptions.latitude) ||
+                optTypesDetected.containsKey(ValidOptions.longitude)) &&
+                optTypesDetected.containsKey(ValidOptions.sensorId))
             // both --latitude/--longitude and --sensor-id
             error = true;
         if(error) throw new ArgumentsParserException("Invalid arguments - check --h");
@@ -166,9 +166,9 @@ public class ArgumentParser {
      * @throws ArgumentsParserException when error while setting sensorId occurs.
      */
     private void provideSingleSensorInputInfo(ProgramInput progInput, String[] args,
-                                              HashMap<String, Integer> optTypesDetected)
+                                              HashMap<ValidOptions, Integer> optTypesDetected)
             throws ArgumentsParserException {
-        Integer sensorId = provideSensorId(args[optTypesDetected.get(ValidOptions.sensorId.name())]);
+        Integer sensorId = provideSensorId(args[optTypesDetected.get(ValidOptions.sensorId)]);
         progInput.setSensorId(sensorId);
         progInput.setRunningMode(RunningMode.sensorMeasurements);
     }
@@ -184,17 +184,17 @@ public class ArgumentParser {
      * setLatitude or setLongitude
      */
     private void provideNearestSensorInputInfo(ProgramInput progInput, String[] args,
-                                               HashMap<String, Integer> optTypesDetected) {
+                                               HashMap<ValidOptions, Integer> optTypesDetected) {
         // Checking if user wants to see nearest sensor (to the given --lat./--long.) sensor system details
         // or its measurements.
-        if(optTypesDetected.containsKey(ValidOptions.sensorInfo.name())) {
+        if(optTypesDetected.containsKey(ValidOptions.sensorInfo)) {
             // --sensor-info in this context is absolutely fine.
             progInput.setRunningMode(RunningMode.sensorDetails);
             progInput.setSensorDetailsWithId(false);
         }
         else progInput.setRunningMode(RunningMode.nearestMeasurements);
-        Double latitude = provideCoordValue(args[optTypesDetected.get(ValidOptions.latitude.name())]);
-        Double longitude = provideCoordValue(args[optTypesDetected.get(ValidOptions.longitude.name())]);
+        Double latitude = provideCoordValue(args[optTypesDetected.get(ValidOptions.latitude)]);
+        Double longitude = provideCoordValue(args[optTypesDetected.get(ValidOptions.longitude)]);
         progInput.setLatitude(latitude);
         progInput.setLongitude(longitude);
     }
